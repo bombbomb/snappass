@@ -12,6 +12,28 @@ SnapPass
     :target: https://travis-ci.org/pinterest/snappass
     :alt: Build status
 
+BombBomb
+--------
+
+To build a new docker image for this repo, do the following.
+Pull upstream changes in github.
+
+git remote add upstream https://github.com/pinterest/snappass.git
+git fetch upstream
+git checkout master
+git merge upstream/master
+git push
+
+Hop onto git and grab the git short hash (7 characters).
+
+docker build . -t docker-private.bombbomb.io/snappass:<short_hash>
+docker push docker-private.bombbbomb.io/snappass:<short_hash>
+
+Update hash in infrastructure-as-code repo under lighthouse-dev|prod/k8s/manifests/snappass.yaml.
+
+Snappass
+--------
+
 It's like SnapChat... for passwords.
 
 This is a web app that lets you share passwords securely.
