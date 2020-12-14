@@ -16,20 +16,35 @@ BombBomb
 --------
 
 To build a new docker image for this repo, do the following.
-Pull upstream changes in github.
 
-git remote add upstream https://github.com/pinterest/snappass.git
-git fetch upstream
-git checkout master
-git merge upstream/master
-git push
+* Checkout a feature branch.
+* Pull upstream changes using:
 
-Hop onto git and grab the git short hash (7 characters).
+.. code_block:: sh
 
-docker build . -t docker-private.bombbomb.io/snappass:<short_hash>
-docker push docker-private.bombbbomb.io/snappass:<short_hash>
+   git remote add upstream https://github.com/pinterest/snappass.git
+   git fetch upstream
+   git merge upstream/master
 
-Update hash in infrastructure-as-code repo under lighthouse-dev|prod/k8s/manifests/snappass.yaml.
+* Make changes.
+* Increment version number in `version.txt`.
+* Build the docker image using:
+
+.. code_block:: sh
+
+   VERSION=$(<version.txt)
+   docker build . -t docker-private.bombbomb.io/snappass:$VERSION
+
+* Push to remote, make PR and merge master.
+* Create new tag using:
+
+.. code_block:: sh
+
+   git tag $VERSION
+   git push --tags
+
+* Push docker image using `docker push docker-private.bombbomb.io/snappass:$VERSION`.
+* Update snappass image tag in `infrastructure-as-code` project and redeploy over there.
 
 Snappass
 --------
